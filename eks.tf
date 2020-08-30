@@ -39,6 +39,6 @@ resource "aws_eks_node_group" "test-cluster-node-group" {
 
     tags = {
         Name = "kubernetes.io/cluster/test-cluster"
-        "kubernetes.io/cluster/test-cluster" = "shared"
+        "kubernetes.io/cluster/test-cluster" = "owned"
     }
 }
