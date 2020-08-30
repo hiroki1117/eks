@@ -4,6 +4,10 @@ data "aws_availability_zones" "available-zone" {
 
 resource "aws_vpc" "eks-test-clueter-vpc" {
     cidr_block = "10.25.0.0/16"
+    tags = {
+        Name = "kubernetes.io/cluster/test-cluster"
+        "kubernetes.io/cluster/test-cluster" = "shared"
+    }
 }
 
 resource "aws_subnet" "eks-test-cluster-subnet" {
@@ -13,6 +17,7 @@ resource "aws_subnet" "eks-test-cluster-subnet" {
     cidr_block        = cidrsubnet(aws_vpc.eks-test-clueter-vpc.cidr_block, 8, count.index)
     vpc_id            = aws_vpc.eks-test-clueter-vpc.id
     tags = {
-        "kubernetes.io/cluster/test-clueter" = "shared"
+        Name = "kubernetes.io/cluster/test-cluster"
+        "kubernetes.io/cluster/test-cluster" = "shared"
     }
 }

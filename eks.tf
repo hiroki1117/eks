@@ -4,7 +4,7 @@ resource "aws_eks_cluster" "test-cluster" {
     name     = "test-cluster"
     role_arn = aws_iam_role.eks-test-cluster-role.arn
 
-    version  = "1.14"
+    version  = "1.17"
 
     vpc_config {
         subnet_ids = aws_subnet.eks-test-cluster-subnet.*.id
@@ -26,8 +26,19 @@ resource "aws_eks_node_group" "test-cluster-node-group" {
     subnet_ids      = aws_subnet.eks-test-cluster-subnet.*.id
 
     scaling_config {
-        desired_size = 3
+        desired_size = 2
         max_size     = 5
         min_size     = 2
+    }
+
+    depends_on = [
+        aws_iam_role_policy_attachment.eks-test-cluster-node-role-AmazonEKSWorkerNodePolicy,
+        aws_iam_role_policy_attachment.eks-test-cluster-node-role-AmazonEKS_CNI_Policy,
+        aws_iam_role_policy_attachment.eks-test-cluster-node-role-AmazonEC2ContainerRegistryReadOnly
+    ]
+
+    tags = {
+        Name = "kubernetes.io/cluster/test-cluster"
+        "kubernetes.io/cluster/test-cluster" = "shared"
     }
 }
